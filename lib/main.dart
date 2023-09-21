@@ -1,5 +1,5 @@
-import 'package:blogapp/Providers/post_provider.dart';
-import 'package:blogapp/Screens/bottom_navbar.dart';
+import 'package:blogapp/providers/post_provider.dart';
+import 'package:blogapp/screens/bottom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
         // Add more providers for user authentication, offline posts, etc. as needed.
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Blog App',
         theme: ThemeData(
           primarySwatch: Colors.red,

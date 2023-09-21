@@ -1,18 +1,23 @@
+import 'package:blogapp/models/post.dart';
 import 'package:flutter/material.dart';
-import 'package:blogapp/Models/post.dart';
 
-class PostDetailScreen extends StatelessWidget {
+class BlogItem extends StatelessWidget {
   final Post post;
 
-  PostDetailScreen({required this.post});
+  BlogItem({required this.post});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Blog Post Details'),
+    return Card(
+      margin: EdgeInsets.all(8.0),
+      elevation: 3.0,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+          color: Theme.of(context).colorScheme.outline,
+        ),
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
-      body: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
