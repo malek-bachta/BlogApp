@@ -1,21 +1,28 @@
+import 'package:blogapp/Models/post.dart';
+import 'package:blogapp/Providers/post_provider.dart';
 import 'package:blogapp/Screens/blog_item.dart';
+import 'package:blogapp/Screens/post_detail.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:blogapp/Providers/post_provider.dart';
-import 'package:blogapp/Models/post.dart';
 
 class HomePage extends StatelessWidget {
+  Future<void> _reloadPosts(BuildContext context) async {
+    await Provider.of<PostProvider>(context, listen: false).fetchPosts();
+  }
+
   @override
   Widget build(BuildContext context) {
     final postProvider = Provider.of<PostProvider>(context);
 
     return Scaffold(
-      appBar: AppBar(
+      /*appBar: AppBar(
         title: Text('Blog Posts'),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add_circle , size: 35,),
-
+            icon: const Icon(
+              Icons.add_circle,
+              size: 35,
+            ),
             tooltip: 'Show Snackbar',
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -23,60 +30,67 @@ class HomePage extends StatelessWidget {
             },
           ),
         ],
-      ),
-      body:
-      Column(
-        children: [
-          TextField(
-
-            decoration: InputDecoration(
-              hintText: 'Search',
-              prefixIcon: Icon(Icons.search_sharp),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(50),
-
+      ),*/
+      body: SafeArea(
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                hintText: 'Search',
+                prefixIcon: Icon(Icons.search_sharp),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50),
+                ),
               ),
-
+              onChanged: (value) {
+                Provider.of<PostProvider>(context, listen: false)
+                    .searchPosts(value);
+              },
             ),
-            onChanged: (value) {
-              // Call the searchPosts function to update the filtered list
-              Provider.of<PostProvider>(context, listen: false).searchPosts(value);
-            },
-          ),
-       Expanded(
-          child: FutureBuilder<List<Post>>(
-            // Use FutureBuilder to fetch and display posts from your PostProvider
-            future: postProvider.fetchPosts(),
-            builder: (context, snapshot) {
-             /* if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else*/ if (snapshot.hasError) {
-                return Center(child: Text('Error: ${snapshot.error}'));
-              } else if (snapshot.hasData && snapshot.data!.isEmpty) {
-                return Center(child: Text('No posts available.'));
-              } else if (snapshot.hasData) {
-                final posts = snapshot.data!; // List of Post objects
-                final displayedPosts =
-                postProvider.filteredPosts.isNotEmpty
-                    ? postProvider.filteredPosts
-                    : posts;
+            Expanded(
+              child: RefreshIndicator(
+                onRefresh: () => _reloadPosts(context),
+                child: FutureBuilder<List<Post>>(
+                  future: postProvider.fetchPosts(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return Center(child: Text('Error: ${snapshot.error}'));
+                    } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                      return Center(child: Text('No posts available.'));
+                    } else if (snapshot.hasData) {
+                      final posts = snapshot.data!; // List of Post objects
+                      final displayedPosts =
+                          postProvider.filteredPosts.isNotEmpty
+                              ? postProvider.filteredPosts
+                              : posts;
 
-                return ListView.builder(
-                  itemCount: displayedPosts.length,
-                  itemBuilder: (context, index) {
-                    final post = displayedPosts[index];
-                    return BlogItem(post: post);
+                      return ListView.builder(
+                        itemCount: displayedPosts.length,
+                        itemBuilder: (context, index) {
+                          final post = displayedPosts[index];
+                          return InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      PostDetailScreen(post: post),
+                                ),
+                              );
+                            },
+                            child: BlogItem(post: post),
+                          );
+                        },
+                      );
+                    } else {
+                      return Center(child: Text('No data available.'));
+                    }
                   },
-                );
-
-              } else {
-                // Handle the case where snapshot.data is null
-                return Center(child: Text('No data available.'));
-              }
-            },
-          ),
-       ),
-        ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
