@@ -13,7 +13,10 @@ class BlogItem extends StatelessWidget {
       elevation: 3.0,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: Theme.of(context).colorScheme.outline,
+          color: Theme
+              .of(context)
+              .colorScheme
+              .outline,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(15)),
       ),
@@ -33,6 +36,30 @@ class BlogItem extends StatelessWidget {
             Text(
               post.body,
               style: TextStyle(fontSize: 16.0),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+            ),
+            SizedBox(height: 4.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Text(
+                  '... ',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                Text(
+                  'Read More',
+                  style: TextStyle(
+                    fontSize: 12.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
             ),
           ],
         ),

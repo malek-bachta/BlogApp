@@ -93,18 +93,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'addCommentButton',
-        onPressed: () {
-          _showCommentPopup(context);
-        },
-        child: Icon(Icons.add_comment),
-      ),
     );
-  }
-
-  void _showCommentPopup(BuildContext context) {
-    // Implement your comment input popup here
   }
 
   void toggleSavePost() async {

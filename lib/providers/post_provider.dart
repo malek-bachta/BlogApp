@@ -13,17 +13,16 @@ class PostProvider with ChangeNotifier {
   Future<List<Post>> fetchPosts() async {
     try {
       final List<Map<String, dynamic>> postData =
-      await _apiService.fetchPosts();
+          await _apiService.fetchPosts();
       _posts = postData
-          .map((data) =>
-          Post(
-            userId: data['userId'],
-            id: data['id'],
-            title: data['title'],
-            body: data['body'],
-            comments: [],
-            isSavedOffline: false,
-          ))
+          .map((data) => Post(
+                userId: data['userId'],
+                id: data['id'],
+                title: data['title'],
+                body: data['body'],
+                comments: [],
+                isSavedOffline: false,
+              ))
           .toList();
 
       _filteredPosts = _posts;
@@ -50,7 +49,7 @@ class PostProvider with ChangeNotifier {
   Future<List<Comment>> fetchCommentsForPost(int postId) async {
     try {
       final List<Comment> comments =
-      await _apiService.fetchCommentsForPost(postId);
+          await _apiService.fetchCommentsForPost(postId);
       return comments;
     } catch (error) {
       print('Error fetching comments for post $postId: $error');
@@ -59,11 +58,9 @@ class PostProvider with ChangeNotifier {
   }
 
   void addComment(Comment comment) {
-    // Find the post by its ID in the _posts list
     final postIndex = _posts.indexWhere((p) => p.id == comment.postId);
 
     if (postIndex != -1) {
-      // Add the comment to the post's comments list
       _posts[postIndex].comments.add(comment);
       notifyListeners();
     }
@@ -77,6 +74,4 @@ class PostProvider with ChangeNotifier {
       notifyListeners();
     }
   }
-
-
 }
