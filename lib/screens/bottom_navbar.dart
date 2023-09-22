@@ -14,8 +14,8 @@ class _BottomNavBarDemoState extends State<BottomNavBar> {
 
   final List<Widget> _screens = [
     HomePage(),
-    AddPost(),
     OfflinePosts(),
+    AddPost(),
     UserPosts(),
   ];
 
@@ -31,20 +31,18 @@ class _BottomNavBarDemoState extends State<BottomNavBar> {
         unselectedItemColor: Colors.grey[600],
         currentIndex: _currentIndex,
         type: BottomNavigationBarType.shifting,
-        // Ensure labels are visible
-
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.add),
-            label: 'Add Post',
-          ),
-          BottomNavigationBarItem(
             icon: Icon(Icons.save),
             label: 'Offline Posts',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.add),
+            label: 'Add Post',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

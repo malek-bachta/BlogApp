@@ -4,7 +4,18 @@ import 'package:blogapp/providers/post_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    super.initState();
+    _reloadPosts(context);
+  }
+
   Future<void> _reloadPosts(BuildContext context) async {
     await Provider.of<PostProvider>(context, listen: false).fetchPosts();
   }
@@ -12,18 +23,10 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      /*  appBar: AppBar(
-        title: Text('Blog Posts'), // Add your app title here
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add), // Add your desired icon here
-            onPressed: () {
-              // Handle the action when the add button is pressed.
-              // You can navigate to a new post creation screen, for example.
-            },
-          ),
-        ],
-      ),*/
+      appBar: AppBar(
+        title: Text('Blog Posts'),
+        centerTitle: true, // Add your app title here
+      ),
       body: SafeArea(
         child: Column(
           children: [
@@ -44,12 +47,18 @@ class HomePage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: RefreshIndicator(
-                onRefresh: () => _reloadPosts(context),
-                child: Consumer<PostProvider>(
-                  builder: (context, postProvider, child) {
+              child: FutureBuilder(
+                future: _reloadPosts(context),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text('Error: ${snapshot.error}');
+                  } else {
                     final posts =
-                        postProvider.filteredPosts; // Use filteredPosts
+                        Provider.of<PostProvider>(context).filteredPosts;
 
                     return ListView.builder(
                       itemCount: posts.length,
@@ -58,8 +67,10 @@ class HomePage extends StatelessWidget {
                         return InkWell(
                           onTap: () async {
                             // Fetch comments for the selected post using Provider
-                            final comments = await postProvider
-                                .fetchCommentsForPost(post.id);
+                            final comments = await Provider.of<PostProvider>(
+                              context,
+                              listen: false,
+                            ).fetchCommentsForPost(post.id);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -74,8 +85,8 @@ class HomePage extends StatelessWidget {
                         );
                       },
                     );
-                  },
-                ),
+                  }
+                },
               ),
             ),
           ],
