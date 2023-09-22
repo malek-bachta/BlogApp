@@ -16,14 +16,11 @@ class OfflinePosts extends StatelessWidget {
           FutureBuilder<List<OfflinePost>>(
             future: OfflinePostStorage.getOfflinePosts(),
             builder: (context, snapshot) {
-              /*if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(child: CircularProgressIndicator());
-              } else*/
               if (snapshot.hasError) {
                 return Center(child: Text('Error: ${snapshot.error}'));
               } else if (!(snapshot.hasData &&
                   snapshot.data?.isNotEmpty == true)) {
-                return Center(child: Text('No offline posts available.'));
+                return Center(child: Text('0' + '   '));
               } else {
                 final offlinePosts = snapshot.data!;
 
@@ -33,10 +30,10 @@ class OfflinePosts extends StatelessWidget {
                 // Use the Badge widget from the badges library
                 return badges.Badge(
                   badgeContent: Text(
-                    numberOfOfflinePosts.toString(),
+                    numberOfOfflinePosts.toString() + ' ' + '  ',
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 20,
+                      fontSize: 18,
                     ),
                   ),
                 );
@@ -48,9 +45,7 @@ class OfflinePosts extends StatelessWidget {
       body: FutureBuilder<List<OfflinePost>>(
         future: OfflinePostStorage.getOfflinePosts(),
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
-          } else if (snapshot.hasError) {
+          if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!(snapshot.hasData && snapshot.data?.isNotEmpty == true)) {
             return Center(child: Text('No offline posts available.'));

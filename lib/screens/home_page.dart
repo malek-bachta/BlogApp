@@ -13,7 +13,11 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _reloadPosts(context);
+    _loadPosts();
+  }
+
+  Future<void> _loadPosts() async {
+    await _reloadPosts(context);
   }
 
   Future<void> _reloadPosts(BuildContext context) async {
@@ -52,7 +56,14 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return Center(
-                      child: CircularProgressIndicator(),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(height: 10.0),
+                          Text('Loading...'),
+                        ],
+                      ),
                     );
                   } else if (snapshot.hasError) {
                     return Text('Error: ${snapshot.error}');

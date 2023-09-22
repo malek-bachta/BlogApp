@@ -16,4 +16,25 @@ class Post {
     required this.comments,
     required this.isSavedOffline,
   });
+
+  // Convert a Post object to JSON
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'title': title,
+      'body': body,
+    };
+  }
+
+  // Create a Post object from JSON
+  factory Post.fromJson(Map<String, dynamic> json) {
+    return Post(
+      id: json['id'],
+      title: json['title'],
+      body: json['body'],
+      userId: 1,
+      comments: [],
+      isSavedOffline: true,
+    );
+  }
 }

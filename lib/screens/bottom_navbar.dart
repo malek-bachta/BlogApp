@@ -1,7 +1,6 @@
-import 'package:blogapp/Screens/add_post.dart';
-import 'package:blogapp/Screens/home_page.dart';
-import 'package:blogapp/Screens/offline_posts.dart';
-import 'package:blogapp/Screens/user_posts.dart';
+import 'package:blogapp/screens/home_page.dart';
+import 'package:blogapp/screens/offline_posts.dart';
+import 'package:blogapp/screens/user_posts.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavBar extends StatefulWidget {
@@ -15,8 +14,8 @@ class _BottomNavBarDemoState extends State<BottomNavBar> {
   final List<Widget> _screens = [
     HomePage(),
     OfflinePosts(),
-    AddPost(),
-    UserPosts(),
+    // AddPost(),
+    AddedPosts(),
   ];
 
   @override
@@ -40,13 +39,13 @@ class _BottomNavBarDemoState extends State<BottomNavBar> {
             icon: Icon(Icons.save),
             label: 'Offline Posts',
           ),
-          BottomNavigationBarItem(
+          /*BottomNavigationBarItem(
             icon: Icon(Icons.add),
             label: 'Add Post',
-          ),
+          ),*/
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
-            label: 'User Posts',
+            label: 'Added Posts',
           ),
         ],
         onTap: (index) {
