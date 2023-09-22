@@ -1,7 +1,7 @@
-import 'package:blogapp/models/post.dart'; // Import your Post model
+import 'package:blogapp/models/added_post.dart';
 import 'package:blogapp/providers/crud_provider.dart';
 import 'package:blogapp/screens/items/add_post_dialog.dart';
-import 'package:blogapp/screens/items/blog_item.dart';
+import 'package:blogapp/screens/items/post_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -29,22 +29,33 @@ class _AddedPostsState extends State<AddedPosts> {
       body: posts.isEmpty
           ? Center(child: Text('No posts available.'))
           : ListView.builder(
-              itemCount: posts.length,
-              itemBuilder: (ctx, index) {
-                final post = posts[index];
+        itemCount: posts.length,
+        itemBuilder: (ctx, index) {
+          final post = posts[index];
 
-                return BlogItem(
-                  post: Post(
-                    title: post.title,
-                    body: post.body,
-                    userId: 1,
-                    id: 1,
-                    comments: [],
-                    isSavedOffline: true,
-                  ),
-                );
-              },
+          return PostItem(
+            post: AddedPost(
+              title: post.title,
+              body: post.body,
+              id: post.id,
             ),
+            onDelete: () {
+              crudProvider.deletePost(post
+                  .id);
+            },
+            onUpdate: () {
+              // Update post logic
+              showDialog(
+                context: context,
+                builder: (context) =>
+                    AddPostDialog(
+                      initialPost: post,
+                    ),
+              );
+            },
+          );
+        },
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           showDialog(
